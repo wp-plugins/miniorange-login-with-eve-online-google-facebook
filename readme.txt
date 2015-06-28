@@ -13,7 +13,7 @@ OAuth login through your favorite apps like EVE Online, Google, Facebook for use
 
 Login with famous applications such as EVE Online and Google. If you require any other application , please free to email us at info@miniorange.com or <a href="http://miniorange.com/contact" target="_blank">Contact us</a>.
 
-Features
+= Features =
 *	Login to your Wordpress site using EVE Online and Google.
 *	Valid user registrations verified by applications such as EVE Online, Google.
 *	You can disable the applications which you don't require.
