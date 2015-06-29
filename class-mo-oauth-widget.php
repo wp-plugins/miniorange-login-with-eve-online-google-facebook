@@ -56,13 +56,13 @@ class Mo_Oauth_Widget extends WP_Widget {
 				if( get_option('mo_oauth_google_enable') ) {
 					$this->mo_oauth_load_login_script();
 				?>
-				<p> <a href="javascript:void(0)" onClick="moOAuthLogin('google');" target="_blank"><img src="<?php echo plugins_url( 'miniorange-oauth-login/images/icons/google.jpg' )?>"></a>
+				<p> <a href="javascript:void(0)" onClick="moOAuthLogin('google');"><img src="<?php echo plugins_url( 'images/icons/google.jpg', __FILE__ )?>"></a>
 				<?php
 				}
 				if( get_option('mo_oauth_eveonline_enable') ) {
 					$this->mo_oauth_load_login_script();
 				?>
-					<a href="javascript:void(0)" onClick="moOAuthLogin('eveonline');" target="_blank"><img src="<?php echo plugins_url( 'miniorange-oauth-login/images/icons/eveonline.png' )?>"></a>
+					<a href="javascript:void(0)" onClick="moOAuthLogin('eveonline');"><img src="<?php echo plugins_url( 'images/icons/eveonline.png', __FILE__ )?>"></a>
 				<?php
 				}
 			} else {
@@ -107,7 +107,7 @@ class Mo_Oauth_Widget extends WP_Widget {
 	}
 	
 	public function register_plugin_styles() {
-		wp_enqueue_style( 'style_login_widget', plugins_url( 'miniorange-oauth-login/style_login_widget.css' ) );
+		wp_enqueue_style( 'style_login_widget', plugins_url( 'style_login_widget.css', __FILE__ ) );
 	}
 	
 	

@@ -50,8 +50,8 @@ function mo_oauth_show_new_registration_page() {
 							<td><b><font color="#FF0000">*</font>Phone number:</b></td>
 							<td><input class="mo_table_textbox" type="tel"
 								pattern="[\+]\d{11,14}" name="phone" required
-								title="Phone with courntry code eg. +1xxxxxxxxxx"
-								placeholder="Phone with courntry code eg. +1xxxxxxxxxx"
+								title="Phone with country code eg. +1xxxxxxxxxx"
+								placeholder="Phone with country code eg. +1xxxxxxxxxx"
 								value="<?php echo get_option('mo_oauth_admin_phone');?>" /></td>
 						</tr>
 						<tr>

@@ -80,10 +80,16 @@ Please email us at info@miniorange.com or <a href="http://miniorange.com/contact
 
 == Changelog ==
 
+= 1.0.1 =
+* Resolved some bug fixes.
+
 = 1.0 =
 * First version with supported applications as EVE Online and Google.
 
 == Upgrade Notice ==
+
+= 1.0.1 =
+* Updated version
 
 = 1.0 =
 First version of plugin.
