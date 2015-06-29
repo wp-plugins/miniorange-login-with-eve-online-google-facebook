@@ -57,7 +57,7 @@ function mo_oauth_show_new_registration_page() {
 						<tr>
 							<td><b><font color="#FF0000">*</font>Password:</b></td>
 							<td><input class="mo_table_textbox" required type="password"
-								name="password" placeholder="Choose your password" /></td>
+								name="password" placeholder="Choose your password (Min. length 8)" /></td>
 						</tr>
 						<tr>
 							<td><b><font color="#FF0000">*</font>Confirm Password:</b></td>
@@ -147,14 +147,6 @@ function mo_oauth_apps_config() {
 						</tr>
 
 						<tr>
-							<td><strong>Redirect URL: (URL where users will be redirected to
-									after login)</strong></td>
-							<td><input class="mo_table_textbox" type="url"
-								name="mo_oauth_google_redirect_url"
-								placeholder="By default set to user's current URL"
-								value="<?php echo get_option('mo_oauth_google_redirect_url'); ?>" /></td>
-						</tr>
-						<tr>
 							<td>&nbsp;</td>
 							<td><input type="submit" name="submit" value="Save settings"
 								class="button button-primary button-large" />&nbsp;&nbsp; <input
@@ -180,9 +172,7 @@ function mo_oauth_apps_config() {
 										display to users when they are asked to grant access to your
 										site/app.</li>
 									<li>Paste your Client ID/Secret provided by Google into the
-										fields above. Enter the URL you want your users to redirect to
-										in Redirect URL above e.g. (<b><?php echo site_url(); ?></b>).
-									</li>
+										fields above.</li>
 									<li>Click on the Save settings button.</li>
 									<li>Go to Appearance->Widgets. Among the available widgets you
 										will find miniOrange OAuth, drag it to the widget area where
@@ -232,14 +222,6 @@ function mo_oauth_apps_config() {
 								value="<?php echo get_option('mo_oauth_eveonline_client_secret'); ?>" /></td>
 						</tr>
 						<tr>
-							<td><strong>Redirect URL: (URL where users will be redirected to
-									after login)</strong></td>
-							<td><input class="mo_table_textbox" type="url"
-								placeholder="By default set to user's current URL"
-								name="mo_oauth_eveonline_redirect_url"
-								value="<?php echo get_option('mo_oauth_eveonline_redirect_url'); ?>" /></td>
-						</tr>
-						<tr>
 							<td><a href="admin.php?page=mo_oauth_eve_online_setup">Advanced
 									Settings</a></td>
 							<td><input type="submit" name="submit" value="Save settings"
@@ -258,10 +240,7 @@ function mo_oauth_apps_config() {
 									<li>At EVE Online, add a new project/application. Generate
 										Client ID and Client Secret.</li>
 									<li>At EVE Online, set Redirect URL as <b>https://auth.miniorange.com/moas/oauth/client/callback</b></li>
-									<li>Enter your Client ID and Client Secret above.Enter the URL
-										you want your users to redirect to in Redirect URL above e.g.
-										(<b><?php echo site_url(); ?></b>).
-									</li>
+									<li>Enter your Client ID and Client Secret above.</li>
 									<li>Click on the Save settings button.</li>
 									<li>Go to Appearance->Widgets. Among the available widgets you
 										will find miniOrange OAuth, drag it to the widget area where

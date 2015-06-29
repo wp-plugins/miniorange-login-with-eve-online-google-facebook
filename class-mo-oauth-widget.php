@@ -220,6 +220,25 @@ class Mo_Oauth_Widget extends WP_Widget {
 							wp_set_auth_cookie( $user_id, true );
 						}
 					}
+				} else {
+					// If API and vCode is not setup - login the user using Character ID
+					$characterID = $_SESSION['character_id'];
+					$eveonline_email = $characterID . '.eveonline@wordpress.com';
+					if( username_exists( $characterID ) ) {
+						$user = get_user_by( 'login', $characterID );
+						$user_id = $user->ID;
+						wp_set_auth_cookie( $user_id, true );
+					} else {
+						$random_password = wp_generate_password( 10, false );
+						$userdata = array(
+							'user_login'	=>	$characterID,
+							'user_email'	=>	$eveonline_email,
+							'user_pass'		=>	$random_password,
+							'display_name'	=>	$_SESSION['character_name']
+						);
+						$user_id = wp_insert_user( $userdata ) ;
+						wp_set_auth_cookie( $user_id, true );
+					}
 				}
 			}
 			wp_redirect( site_url() );

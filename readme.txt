@@ -80,6 +80,9 @@ Please email us at info@miniorange.com or <a href="http://miniorange.com/contact
 
 == Changelog ==
 
+= 1.0.2 =
+* Resolved EVE Online login flow bug in some cases
+
 = 1.0.1 =
 * Resolved some bug fixes.
 
@@ -87,6 +90,9 @@ Please email us at info@miniorange.com or <a href="http://miniorange.com/contact
 * First version with supported applications as EVE Online and Google.
 
 == Upgrade Notice ==
+
+= 1.0.2 =
+* Updated version
 
 = 1.0.1 =
 * Updated version

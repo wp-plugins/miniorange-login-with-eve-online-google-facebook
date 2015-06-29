@@ -37,6 +37,8 @@ class Customer {
 		$password 			= get_option('password');
 		
 		$fields = array(
+			'companyName' => $_SERVER['SERVER_NAME'],
+			'areaOfInterest' => 'WP OAuth Plugin for EVE Online, Google',
 			'firstname'	=> $current_user->user_firstname,
 			'lastname'	=> $current_user->user_lastname,
 			'email'		=> $this->email,
@@ -107,13 +109,22 @@ class Customer {
 		$scope = get_option('mo_oauth_' . $name . '_scope');
 		$client_id = get_option('mo_oauth_' . $name . '_client_id');
 		$client_secret = get_option('mo_oauth_' . $name . '_client_secret');
-		$fields = array(
-			'applicationName'	=> $app_name,
-			'customerId' 		=> $customerKey,
-			'scope'				=> $scope,
-			'clientId' 			=> $client_id,
-			'clientSecret' 		=> $client_secret
-		);
+		if($scope != false) {
+			$fields = array(
+				'applicationName'	=> $app_name,
+				'scope'				=> $scope,
+				'customerId' 		=> $customerKey,
+				'clientId' 			=> $client_id,
+				'clientSecret' 		=> $client_secret
+			);
+		} else {
+			$fields = array(
+				'applicationName'	=> $app_name,
+				'customerId' 		=> $customerKey,
+				'clientId' 			=> $client_id,
+				'clientSecret' 		=> $client_secret
+			);
+		}
 		$field_string = json_encode( $fields );
 		
 		curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
