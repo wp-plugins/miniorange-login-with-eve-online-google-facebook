@@ -16,7 +16,6 @@ delete_option('mo_oauth_eveonline_enable');
 delete_option('mo_oauth_eveonline_scope');
 delete_option('mo_oauth_eveonline_client_id');
 delete_option('mo_oauth_eveonline_client_secret');
-delete_option('mo_oauth_eveonline_redirect_url');
 delete_option('mo_oauth_eveonline_message');
 delete_option('message');
 delete_option('mo_eve_api_key');
