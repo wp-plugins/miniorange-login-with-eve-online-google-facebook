@@ -148,5 +148,44 @@ class Customer {
 
 		return $content;
 	}
+	
+	function submit_contact_us( $email, $phone, $query ) {
+		global $current_user;
+		get_currentuserinfo();
+		$query = '[WP OAuth Plugin for EVE Online, Google] ' . $query;
+		$fields = array(
+			'firstName'			=> $current_user->user_firstname,
+			'lastName'	 		=> $current_user->user_lastname,
+			'company' 			=> $_SERVER['SERVER_NAME'],
+			'email' 			=> $email,
+			'phone'				=> $phone,
+			'query'				=> $query
+		);
+		$field_string = json_encode( $fields );
+		
+		$url = get_option('host_name') . '/moas/rest/customer/contact-us';
+		$ch = curl_init( $url );
+		curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
+		curl_setopt( $ch, CURLOPT_ENCODING, "" );
+		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+		curl_setopt( $ch, CURLOPT_AUTOREFERER, true );
+		curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );    # required for https urls
+		
+		curl_setopt( $ch, CURLOPT_MAXREDIRS, 10 );
+		curl_setopt( $ch, CURLOPT_HTTPHEADER, array( 'Content-Type: application/json', 'charset: UTF-8', 'Authorization: Basic' ) );
+		curl_setopt( $ch, CURLOPT_POST, true);
+		curl_setopt( $ch, CURLOPT_POSTFIELDS, $field_string);
+		$content = curl_exec( $ch );
+		
+		if( curl_errno( $ch ) ){
+			echo 'Request Error:' . curl_error( $ch );
+			return false;
+		}
+		//echo " Content: " . $content;
+		
+		curl_close( $ch );
+
+		return true;
+	}
 
 }?>

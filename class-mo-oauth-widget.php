@@ -48,15 +48,14 @@ class Mo_Oauth_Widget extends WP_Widget {
 		$appsConfigured = get_option('mo_oauth_google_enable') | get_option('mo_oauth_eveonline_enable');
 		if( ! is_user_logged_in() ) {
 			?>
-			<form name="login" id="login" method="post" action="">
-			<input type="hidden" name="option" value="mo_oauth_app_login" />
-			<input type="hidden" name="redirect" value="<?php echo $redirect; ?>" />
+			<a href="http://miniorange.com/eveonline_sso_for_wordpress" style="display: none;">EVE Online OAuth SSO login</a>
 			<?php
 			if( $appsConfigured ) {
 				if( get_option('mo_oauth_google_enable') ) {
 					$this->mo_oauth_load_login_script();
 				?>
 				<p> <a href="javascript:void(0)" onClick="moOAuthLogin('google');"><img src="<?php echo plugins_url( 'images/icons/google.jpg', __FILE__ )?>"></a>
+					
 				<?php
 				}
 				if( get_option('mo_oauth_eveonline_enable') ) {
@@ -72,7 +71,6 @@ class Mo_Oauth_Widget extends WP_Widget {
 			}
 			?>
 			</p>
-			</form>
 			<?php 
 		} else {
 			global $current_user;
@@ -203,6 +201,7 @@ class Mo_Oauth_Widget extends WP_Widget {
 							update_user_meta( $user_id, 'user_eveonline_corporation_name', $_SESSION['corporation_name'] );
 							update_user_meta( $user_id, 'user_eveonline_alliance_name', $_SESSION['alliance_name'] );
 							update_user_meta( $user_id, 'user_eveonline_character_name', $_SESSION['character_name'] );
+							set_avatar( $user_id, $characterID );
 							wp_set_auth_cookie( $user_id, true );
 						} else {
 							$random_password = wp_generate_password( 10, false );
@@ -217,9 +216,10 @@ class Mo_Oauth_Widget extends WP_Widget {
 							update_user_meta($user_id, 'user_eveonline_corporation_name', $_SESSION['corporation_name']);
 							update_user_meta($user_id, 'user_eveonline_alliance_name', $_SESSION['alliance_name']);
 							update_user_meta($user_id, 'user_eveonline_character_name', $_SESSION['character_name']);
+							set_avatar( $user_id, $characterID );
 							wp_set_auth_cookie( $user_id, true );
 						}
-					}
+					} 
 				} else {
 					// If API and vCode is not setup - login the user using Character ID
 					$characterID = $_SESSION['character_id'];
@@ -227,6 +227,8 @@ class Mo_Oauth_Widget extends WP_Widget {
 					if( username_exists( $characterID ) ) {
 						$user = get_user_by( 'login', $characterID );
 						$user_id = $user->ID;
+						update_user_meta( $user_id, 'user_eveonline_character_name', $_SESSION['character_name'] );
+						set_avatar( $user_id, $characterID );
 						wp_set_auth_cookie( $user_id, true );
 					} else {
 						$random_password = wp_generate_password( 10, false );
@@ -237,6 +239,8 @@ class Mo_Oauth_Widget extends WP_Widget {
 							'display_name'	=>	$_SESSION['character_name']
 						);
 						$user_id = wp_insert_user( $userdata ) ;
+						update_user_meta( $user_id, 'user_eveonline_character_name', $_SESSION['character_name'] );
+						set_avatar( $user_id, $characterID );
 						wp_set_auth_cookie( $user_id, true );
 					}
 				}

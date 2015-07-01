@@ -3,7 +3,7 @@
 * Plugin Name: miniOrange OAuth Login
 * Plugin URI: http://miniorange.com
 * Description: This plugin enables login to your Wordpress site using apps like EVE Online, Google, Facebook.
-* Version: 1.0.3
+* Version: 1.0.4
 * Author: miniOrange
 * Author URI: http://miniorange.com
 * License: GPL2
@@ -11,6 +11,7 @@
 include_once dirname( __FILE__ ) . '/class-mo-oauth-widget.php';
 require('class-customer.php');
 require('mo_oauth_settings_page.php');
+require('manage-avatar.php');
 
 class mo_oauth {
 	
@@ -99,10 +100,12 @@ class mo_oauth {
 	
 	function plugin_settings_style() {
 		wp_enqueue_style( 'mo_oauth_admin_settings_style', plugins_url( 'style_settings.css', __FILE__ ) );
+		wp_enqueue_style( 'mo_oauth_admin_settings_phone_style', plugins_url( 'phone.css', __FILE__ ) );
 	}
 	
 	function plugin_settings_script() {
-		wp_enqueue_script( 'mo_oauth_admin_settings_script', plugins_url( 'settings.js', __FILE__ ), array( 'jquery-form','jquery-effects-blind' ) );
+		wp_enqueue_script( 'mo_oauth_admin_settings_script', plugins_url( 'settings.js', __FILE__ ) );
+		wp_enqueue_script( 'mo_oauth_admin_settings_phone_script', plugins_url('phone.js', __FILE__ ) );
 	}
 	
 	function mo_login_widget_text_domain(){
@@ -362,8 +365,26 @@ class mo_oauth {
 				update_option('message', 'Please register customer before trying to save other configurations');
 				$this->mo_oauth_show_error_message();
 			}
+		} elseif( isset( $_POST['option'] ) and $_POST['option'] == "mo_oauth_contact_us_query_option" ) {
+			// Contact Us query
+			$email = $_POST['mo_oauth_contact_us_email'];
+			$phone = $_POST['mo_oauth_contact_us_phone'];
+			$query = $_POST['mo_oauth_contact_us_query'];
+			$customer = new Customer();
+			if ( $this->mo_oauth_check_empty_or_null( $email ) || $this->mo_oauth_check_empty_or_null( $query ) ) {
+				update_option('message', 'Please fill up Email and Query fields to submit your query.');
+				$this->mo_oauth_show_error_message();
+			} else {
+				$submited = $customer->submit_contact_us( $email, $phone, $query );
+				if ( $submited == false ) {
+					update_option('message', 'Your query could not be submitted. Please try again.');
+					$this->mo_oauth_show_error_message();
+				} else {
+					update_option('message', 'Thanks for getting in touch! We shall get back to you shortly.');
+					$this->mo_oauth_show_success_message();
+				}
+			}
 		}
-		
 	}
 }
 
@@ -372,22 +393,22 @@ class mo_oauth {
 		<h3>Extra profile information</h3>
 		<table class="form-table">
 			<tr>
+				<th><label for="characterName">Character Name</label></th>
+				<td>
+					<input type="text" id="characterName" disabled="true" value="<?php echo get_user_meta( $user->ID, 'user_eveonline_character_name', true ); ?>" class="regular-text" /><br />
+				</td>
+				<td rowspan="3"><?php echo mo_oauth_avatar_manager_get_custom_avatar( $user->ID, '128' ); ?></td>
+			</tr>
+			<tr>
 				<th><label for="corporation">Corporation Name</label></th>
 				<td>
 					<input type="text" id="corporation" disabled="true" value="<?php echo get_user_meta( $user->ID, 'user_eveonline_corporation_name', true ); ?>" class="regular-text" /><br />
 				</td>
-				<td rowspan="3"><img src="http://image.eveonline.com/Character/<?php echo get_user_meta($user->ID, 'user_eveonline_character_id', true);?>_256.jpg"/></td>
 			</tr>
 			<tr>
 				<th><label for="alliance">Alliance Name</label></th>
 				<td>
 					<input type="text" id="alliance" disabled="true" value="<?php echo get_user_meta( $user->ID, 'user_eveonline_alliance_name', true ); ?>" class="regular-text" /><br />
-				</td>
-			</tr>
-			<tr>
-				<th><label for="characterName">Character Name</label></th>
-				<td>
-					<input type="text" id="characterName" disabled="true" value="<?php echo get_user_meta( $user->ID, 'user_eveonline_character_name', true ); ?>" class="regular-text" /><br />
 				</td>
 			</tr>
 		</table>

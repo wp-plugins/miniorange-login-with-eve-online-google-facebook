@@ -1,4 +1,17 @@
 <?php
+require('manage-avatar.php');
+
+$users = get_users( array() );
+foreach ( $users as $user ) {
+	$attachment_id = get_user_meta( $user->ID, 'mo_oauth_avatar_manager_custom_avatar', true );
+	if ( ! empty( $attachment_id ) ) {
+		mo_oauth_avatar_manager_delete_avatar($attachment_id);
+	}
+	delete_user_meta($user->ID, 'user_eveonline_character_name');
+	delete_user_meta($user->ID, 'user_eveonline_corporation_name');
+	delete_user_meta($user->ID, 'user_eveonline_alliance_name');
+}
+
 delete_option('host_name');
 delete_option('mo_oauth_admin_email');
 delete_option('mo_oauth_admin_phone');
