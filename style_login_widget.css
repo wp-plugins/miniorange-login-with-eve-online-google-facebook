@@ -23,19 +23,19 @@
 		padding:5%;
 
 	}
-	.login_wid li{
-		width:98%;
-		float:left;
-		margin:2px;
-	}
-	.openid_social_login{
-		padding:5px 0px 0px 0px;
-		clear:both;
-		width:100% !important;
-	}
-	
-	.login_wid li input{
-		width:85%;
-		float:left;
-		margin:2px;
-	}
+.login_wid li{
+	width:98%;
+	float:left;
+	margin:2px;
+}
+.openid_social_login{
+	padding:5px 0px 0px 0px;
+	clear:both;
+	width:100% !important;
+}
+
+.login_wid li input{
+	width:85%;
+	float:left;
+	margin:2px;
+}
