@@ -3,7 +3,7 @@
 * Plugin Name: miniOrange OAuth Login
 * Plugin URI: http://miniorange.com
 * Description: This plugin enables login to your Wordpress site using apps like EVE Online, Google, Facebook.
-* Version: 1.0.5
+* Version: 1.0.6
 * Author: miniOrange
 * Author URI: http://miniorange.com
 * License: GPL2
@@ -312,7 +312,6 @@ class mo_oauth {
 				update_option( 'mo_oauth_google_scope', $scope);
 				update_option( 'mo_oauth_google_client_id', $clientid);
 				update_option( 'mo_oauth_google_client_secret', $clientsecret);
-				update_option( 'mo_oauth_google_redirect_url', sanitize_text_field($_POST['mo_oauth_google_redirect_url']));
 				if(get_option('mo_oauth_google_client_id') && get_option('mo_oauth_google_client_secret')) {
 					$customer = new Customer();
 					$message = $customer->add_oauth_application( 'google', 'Google OAuth' );
