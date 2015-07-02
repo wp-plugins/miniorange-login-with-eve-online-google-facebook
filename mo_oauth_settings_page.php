@@ -273,6 +273,78 @@ function mo_oauth_apps_config() {
 				</div>
 			</div>
 		</form>
+		
+		<!-- Facebook -->
+		<form id="form-facebook" name="form-facebook" method="post" action="">
+			<input type="hidden" name="option" value="mo_oauth_facebook" /> 
+			<input type="hidden" name="mo_oauth_facebook_scope" value="email" />
+			<div class="mo_table_layout">
+				<div id="toggle4" class="panel_toggle">
+					<h3>Login with Facebook</h3>
+				</div>
+				<div id="panel4">
+					<table class="mo_settings_table">
+						<tr>
+							<td class="mo_table_td_checkbox"><input type="checkbox"
+								id="facebook_enable" name="mo_oauth_facebook_enable" value="1"
+								<?php checked( get_option('mo_oauth_facebook_enable') == 1 );?> /><strong>Enable
+									Facebook</strong></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><strong><font color="#FF0000">*</font>App ID:</strong></td>
+							<td><input class="mo_table_textbox" required class="textbox"
+								type="text" placeholder="Click on Help to know more"
+								name="mo_oauth_facebook_client_id"
+								value="<?php echo get_option('mo_oauth_facebook_client_id'); ?>" /></td>
+						</tr>
+
+						<tr>
+							<td><strong><font color="#FF0000">*</font>App Secret:</strong></td>
+							<td><input class="mo_table_textbox" required type="text"
+								placeholder="Click on Help to know more"
+								name="mo_oauth_facebook_client_secret"
+								value="<?php echo get_option('mo_oauth_facebook_client_secret'); ?>" /></td>
+						</tr>
+
+						<tr>
+							<td>&nbsp;</td>
+							<td><input type="submit" name="submit" value="Save settings"
+								class="button button-primary button-large" />&nbsp;&nbsp; <input
+								type="button" id="facebook_help" class="help" value="Help" /></td>
+						</tr>
+						<tr>
+							<td colspan="2" id="facebook_instru" hidden>
+								<p>
+									<strong>Instructions:</strong>
+								
+								<ol>
+									<li>Go to Facebook developers console <a
+										href='https://developers.facebook.com/apps/'
+										target="_blank">https://developers.facebook.com/apps/</a>.
+									</li>
+									<li>Click on Create a New App/Add new App button. You will need to register as a Facebook developer to create an App.</li>
+									<li>Enter <b>Display Name</b>. And choose category.</li>
+									<li>Click on <b>Create App ID</b>.</li>
+									<li>From the left pane, select <b>Settings</b>.</li>
+									<li>From the tabs above, select <b>Advanced</b>.</li>
+									<li>Under <b>Client OAuth Settings</b>, enter <b>https://auth.miniorange.com/moas/oauth/client/callback</b> in Valid OAuth redirect URIs and click <b>Save Changes</b>.</li>
+									<li>Paste your App ID/Secret provided by Facebook into the
+										fields above.</li>
+									<li>Click on the Save settings button.</li>
+									<li>Go to Appearance->Widgets. Among the available widgets you
+										will find miniOrange OAuth, drag it to the widget area where
+										you want it to appear.</li>
+									<li>Now logout and go to your site. You will see a login link
+										where you placed that widget.</li>
+								</ol>
+								</p>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</form>
 
 </div>
 

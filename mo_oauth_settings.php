@@ -3,7 +3,7 @@
 * Plugin Name: miniOrange OAuth Login
 * Plugin URI: http://miniorange.com
 * Description: This plugin enables login to your Wordpress site using apps like EVE Online, Google, Facebook.
-* Version: 1.0.4
+* Version: 1.0.5
 * Author: miniOrange
 * Author URI: http://miniorange.com
 * License: GPL2
@@ -53,6 +53,12 @@ class mo_oauth {
 		delete_option('mo_oauth_google_client_secret');
 		delete_option('mo_oauth_google_redirect_url');
 		delete_option('mo_oauth_google_message');
+		delete_option('mo_oauth_facebook_enable');
+		delete_option('mo_oauth_facebook_scope');
+		delete_option('mo_oauth_facebook_client_id');
+		delete_option('mo_oauth_facebook_client_secret');
+		delete_option('mo_oauth_facebook_redirect_url');
+		delete_option('mo_oauth_facebook_message');
 		delete_option('mo_oauth_eveonline_enable');
 		delete_option('mo_oauth_eveonline_scope');
 		delete_option('mo_oauth_eveonline_client_id');
@@ -365,7 +371,50 @@ class mo_oauth {
 				update_option('message', 'Please register customer before trying to save other configurations');
 				$this->mo_oauth_show_error_message();
 			}
-		} elseif( isset( $_POST['option'] ) and $_POST['option'] == "mo_oauth_contact_us_query_option" ) {
+		} 
+		// submit facebook app
+		else if( isset( $_POST['option'] ) and $_POST['option'] == "mo_oauth_facebook" ) {
+			
+			//validation and sanitization
+			$scope = '';
+			$clientid = '';
+			$clientsecret = '';
+			if($this->mo_oauth_check_empty_or_null($_POST['mo_oauth_facebook_scope']) || $this->mo_oauth_check_empty_or_null($_POST['mo_oauth_facebook_client_id']) || $this->mo_oauth_check_empty_or_null($_POST['mo_oauth_facebook_client_secret'])) {
+				update_option( 'message', 'Please enter Client ID and Client Secret to save settings.');
+				$this->mo_oauth_show_error_message();
+				return;
+			} else{
+				$scope = sanitize_text_field( $_POST['mo_oauth_facebook_scope'] );
+				$clientid = sanitize_text_field( $_POST['mo_oauth_facebook_client_id'] );
+				$clientsecret = sanitize_text_field( $_POST['mo_oauth_facebook_client_secret'] );
+			}
+			
+			if(mo_oauth_is_customer_registered()) {
+				update_option( 'mo_oauth_facebook_enable', isset( $_POST['mo_oauth_facebook_enable']) ? $_POST['mo_oauth_facebook_enable'] : 0);
+				update_option( 'mo_oauth_facebook_scope', $scope);
+				update_option( 'mo_oauth_facebook_client_id', $clientid);
+				update_option( 'mo_oauth_facebook_client_secret', $clientsecret);
+				if(get_option('mo_oauth_facebook_client_id') && get_option('mo_oauth_facebook_client_secret')) {
+					$customer = new Customer();
+					$message = $customer->add_oauth_application( 'facebook', 'Facebook OAuth' );
+					if($message == 'Application Created') {
+						update_option( 'message', 'Your settings were saved' );
+						$this->mo_oauth_show_success_message();
+					} else {
+						update_option( 'message', $message );
+						$this->mo_oauth_show_error_message();
+					}
+				} else {
+					update_option( 'message', 'Please enter Client ID and Client Secret to save settings');
+					update_option( 'mo_oauth_google_enable', false);
+					$this->mo_oauth_show_error_message();
+				}
+			} else {
+				update_option('message', 'Please register customer before trying to save other configurations');
+				$this->mo_oauth_show_error_message();
+			}
+		} 
+		elseif( isset( $_POST['option'] ) and $_POST['option'] == "mo_oauth_contact_us_query_option" ) {
 			// Contact Us query
 			$email = $_POST['mo_oauth_contact_us_email'];
 			$phone = $_POST['mo_oauth_contact_us_phone'];
