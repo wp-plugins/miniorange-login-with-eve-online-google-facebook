@@ -1,4 +1,17 @@
 <?php
+require('manage-avatar.php');
+
+$users = get_users( array() );
+foreach ( $users as $user ) {
+	$attachment_id = get_user_meta( $user->ID, 'mo_oauth_avatar_manager_custom_avatar', true );
+	if ( ! empty( $attachment_id ) ) {
+		mo_oauth_avatar_manager_delete_avatar($attachment_id);
+	}
+	delete_user_meta($user->ID, 'user_eveonline_character_name');
+	delete_user_meta($user->ID, 'user_eveonline_corporation_name');
+	delete_user_meta($user->ID, 'user_eveonline_alliance_name');
+}
+
 delete_option('host_name');
 delete_option('mo_oauth_admin_email');
 delete_option('mo_oauth_admin_phone');
@@ -12,11 +25,16 @@ delete_option('mo_oauth_google_client_id');
 delete_option('mo_oauth_google_client_secret');
 delete_option('mo_oauth_google_redirect_url');
 delete_option('mo_oauth_google_message');
+delete_option('mo_oauth_facebook_enable');
+delete_option('mo_oauth_facebook_scope');
+delete_option('mo_oauth_facebook_client_id');
+delete_option('mo_oauth_facebook_client_secret');
+delete_option('mo_oauth_facebook_redirect_url');
+delete_option('mo_oauth_facebook_message');
 delete_option('mo_oauth_eveonline_enable');
 delete_option('mo_oauth_eveonline_scope');
 delete_option('mo_oauth_eveonline_client_id');
 delete_option('mo_oauth_eveonline_client_secret');
-delete_option('mo_oauth_eveonline_redirect_url');
 delete_option('mo_oauth_eveonline_message');
 delete_option('message');
 delete_option('mo_eve_api_key');

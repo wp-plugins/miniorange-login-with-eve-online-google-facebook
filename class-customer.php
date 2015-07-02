@@ -37,6 +37,8 @@ class Customer {
 		$password 			= get_option('password');
 		
 		$fields = array(
+			'companyName' => $_SERVER['SERVER_NAME'],
+			'areaOfInterest' => 'WP OAuth Plugin for EVE Online, Google',
 			'firstname'	=> $current_user->user_firstname,
 			'lastname'	=> $current_user->user_lastname,
 			'email'		=> $this->email,
@@ -107,13 +109,22 @@ class Customer {
 		$scope = get_option('mo_oauth_' . $name . '_scope');
 		$client_id = get_option('mo_oauth_' . $name . '_client_id');
 		$client_secret = get_option('mo_oauth_' . $name . '_client_secret');
-		$fields = array(
-			'applicationName'	=> $app_name,
-			'customerId' 		=> $customerKey,
-			'scope'				=> $scope,
-			'clientId' 			=> $client_id,
-			'clientSecret' 		=> $client_secret
-		);
+		if($scope != false) {
+			$fields = array(
+				'applicationName'	=> $app_name,
+				'scope'				=> $scope,
+				'customerId' 		=> $customerKey,
+				'clientId' 			=> $client_id,
+				'clientSecret' 		=> $client_secret
+			);
+		} else {
+			$fields = array(
+				'applicationName'	=> $app_name,
+				'customerId' 		=> $customerKey,
+				'clientId' 			=> $client_id,
+				'clientSecret' 		=> $client_secret
+			);
+		}
 		$field_string = json_encode( $fields );
 		
 		curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
@@ -136,6 +147,45 @@ class Customer {
 		curl_close( $ch );
 
 		return $content;
+	}
+	
+	function submit_contact_us( $email, $phone, $query ) {
+		global $current_user;
+		get_currentuserinfo();
+		$query = '[WP OAuth Plugin for EVE Online, Google] ' . $query;
+		$fields = array(
+			'firstName'			=> $current_user->user_firstname,
+			'lastName'	 		=> $current_user->user_lastname,
+			'company' 			=> $_SERVER['SERVER_NAME'],
+			'email' 			=> $email,
+			'phone'				=> $phone,
+			'query'				=> $query
+		);
+		$field_string = json_encode( $fields );
+		
+		$url = get_option('host_name') . '/moas/rest/customer/contact-us';
+		$ch = curl_init( $url );
+		curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
+		curl_setopt( $ch, CURLOPT_ENCODING, "" );
+		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+		curl_setopt( $ch, CURLOPT_AUTOREFERER, true );
+		curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );    # required for https urls
+		
+		curl_setopt( $ch, CURLOPT_MAXREDIRS, 10 );
+		curl_setopt( $ch, CURLOPT_HTTPHEADER, array( 'Content-Type: application/json', 'charset: UTF-8', 'Authorization: Basic' ) );
+		curl_setopt( $ch, CURLOPT_POST, true);
+		curl_setopt( $ch, CURLOPT_POSTFIELDS, $field_string);
+		$content = curl_exec( $ch );
+		
+		if( curl_errno( $ch ) ){
+			echo 'Request Error:' . curl_error( $ch );
+			return false;
+		}
+		//echo " Content: " . $content;
+		
+		curl_close( $ch );
+
+		return true;
 	}
 
 }?>
