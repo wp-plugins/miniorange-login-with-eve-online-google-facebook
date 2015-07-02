@@ -1,11 +1,20 @@
+ .mo_support_layout{
+       width: 93%;
+       background-color:#FFFFFF; 
+       border:1px solid #CCCCCC; 
+       padding-left:20px; 
+}
 .mo_table_layout {
 	background-color:#FFFFFF; 
 	border:1px solid #CCCCCC; 
-	padding:0px 10px 0px 10px; 
-	margin:10px 15% 10px 0px;
+	padding:0px 10px 10px 10px;
+	margin-bottom: 10px;
 }
 .mo_table_layout td {
-	width: 50%;
+	
+}
+.mo_table_layout input['type=text'] {
+	width: 80%;
 }
 .mo_table_layout td strong {
 	margin-left: 10px;
@@ -26,16 +35,19 @@
 	text-decoration: underline;
 }
 .mo_eve_table_textbox {
-	width: 60%;
+	width: 80%;
 }
 .mo_table_td_checkbox {
 	padding-left: 10px;
 }
 .mo_table_textbox {
-	width:55%;
+	width:80%;
 }
 .mo_settings_table {
-	width: 98%;
+	width: 100%;
+}
+.mo_settings_table tr td:first-child {
+	width: 30%;
 }
 .mo_heading_margin {
 	margin-left: 0px;
@@ -65,19 +77,19 @@
 		padding:5%;
 
 	}
-	.login_wid li{
-		width:48%;
-		float:left;
-		margin:2px;
-	}
-	.openid_social_login{
-		padding:5px 0px 0px 0px;
-		clear:both;
-		width:100% !important;
-	}
-	
-	.login_wid li input{
-		width:85%;
-		float:left;
-		margin:2px;
-	}
+.login_wid li{
+	width:48%;
+	float:left;
+	margin:2px;
+}
+.openid_social_login{
+	padding:5px 0px 0px 0px;
+	clear:both;
+	width:100% !important;
+}
+
+.login_wid li input{
+	width:85%;
+	float:left;
+	margin:2px;
+}

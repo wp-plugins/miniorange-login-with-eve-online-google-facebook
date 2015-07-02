@@ -3,7 +3,7 @@
 * Plugin Name: miniOrange OAuth Login
 * Plugin URI: http://miniorange.com
 * Description: This plugin enables login to your Wordpress site using apps like EVE Online, Google, Facebook.
-* Version: 1.0.0
+* Version: 1.0.6
 * Author: miniOrange
 * Author URI: http://miniorange.com
 * License: GPL2
@@ -11,6 +11,7 @@
 include_once dirname( __FILE__ ) . '/class-mo-oauth-widget.php';
 require('class-customer.php');
 require('mo_oauth_settings_page.php');
+require('manage-avatar.php');
 
 class mo_oauth {
 	
@@ -52,11 +53,16 @@ class mo_oauth {
 		delete_option('mo_oauth_google_client_secret');
 		delete_option('mo_oauth_google_redirect_url');
 		delete_option('mo_oauth_google_message');
+		delete_option('mo_oauth_facebook_enable');
+		delete_option('mo_oauth_facebook_scope');
+		delete_option('mo_oauth_facebook_client_id');
+		delete_option('mo_oauth_facebook_client_secret');
+		delete_option('mo_oauth_facebook_redirect_url');
+		delete_option('mo_oauth_facebook_message');
 		delete_option('mo_oauth_eveonline_enable');
 		delete_option('mo_oauth_eveonline_scope');
 		delete_option('mo_oauth_eveonline_client_id');
 		delete_option('mo_oauth_eveonline_client_secret');
-		delete_option('mo_oauth_eveonline_redirect_url');
 		delete_option('mo_oauth_eveonline_message');
 		delete_option('message');
 		delete_option('mo_eve_api_key');
@@ -99,11 +105,13 @@ class mo_oauth {
 	}
 	
 	function plugin_settings_style() {
-		wp_enqueue_style( 'mo_oauth_admin_settings_style', plugins_url( 'miniorange-oauth-login/style_settings.css' ) );
+		wp_enqueue_style( 'mo_oauth_admin_settings_style', plugins_url( 'style_settings.css', __FILE__ ) );
+		wp_enqueue_style( 'mo_oauth_admin_settings_phone_style', plugins_url( 'phone.css', __FILE__ ) );
 	}
 	
 	function plugin_settings_script() {
-		wp_enqueue_script( 'mo_oauth_admin_settings_script', plugins_url( 'miniorange-oauth-login/settings.js' ), array( 'jquery-form','jquery-effects-blind' ) );
+		wp_enqueue_script( 'mo_oauth_admin_settings_script', plugins_url( 'settings.js', __FILE__ ) );
+		wp_enqueue_script( 'mo_oauth_admin_settings_phone_script', plugins_url('phone.js', __FILE__ ) );
 	}
 	
 	function mo_login_widget_text_domain(){
@@ -304,7 +312,6 @@ class mo_oauth {
 				update_option( 'mo_oauth_google_scope', $scope);
 				update_option( 'mo_oauth_google_client_id', $clientid);
 				update_option( 'mo_oauth_google_client_secret', $clientsecret);
-				update_option( 'mo_oauth_google_redirect_url', sanitize_text_field($_POST['mo_oauth_google_redirect_url']));
 				if(get_option('mo_oauth_google_client_id') && get_option('mo_oauth_google_client_secret')) {
 					$customer = new Customer();
 					$message = $customer->add_oauth_application( 'google', 'Google OAuth' );
@@ -336,7 +343,7 @@ class mo_oauth {
 				$this->mo_oauth_show_error_message();
 				return;
 			} else{
-				$clientid = sanitize_text_field($_POST['mo_oauth_eveonline_client_secret']);
+				$clientid = sanitize_text_field($_POST['mo_oauth_eveonline_client_id']);
 				$clientsecret = sanitize_text_field($_POST['mo_oauth_eveonline_client_secret']);
 			}
 			
@@ -344,7 +351,6 @@ class mo_oauth {
 				update_option( 'mo_oauth_eveonline_enable', isset($_POST['mo_oauth_eveonline_enable']) ? $_POST['mo_oauth_eveonline_enable'] : 0);
 				update_option( 'mo_oauth_eveonline_client_id', $clientid);
 				update_option( 'mo_oauth_eveonline_client_secret', $clientsecret);
-				update_option( 'mo_oauth_eveonline_redirect_url', sanitize_text_field($_POST['mo_oauth_eveonline_redirect_url']));
 				if(get_option('mo_oauth_eveonline_client_id') && get_option('mo_oauth_eveonline_client_secret')) {
 					$customer = new Customer();
 					$message = $customer->add_oauth_application('eveonline', 'EVE Online OAuth');
@@ -364,8 +370,69 @@ class mo_oauth {
 				update_option('message', 'Please register customer before trying to save other configurations');
 				$this->mo_oauth_show_error_message();
 			}
+		} 
+		// submit facebook app
+		else if( isset( $_POST['option'] ) and $_POST['option'] == "mo_oauth_facebook" ) {
+			
+			//validation and sanitization
+			$scope = '';
+			$clientid = '';
+			$clientsecret = '';
+			if($this->mo_oauth_check_empty_or_null($_POST['mo_oauth_facebook_scope']) || $this->mo_oauth_check_empty_or_null($_POST['mo_oauth_facebook_client_id']) || $this->mo_oauth_check_empty_or_null($_POST['mo_oauth_facebook_client_secret'])) {
+				update_option( 'message', 'Please enter Client ID and Client Secret to save settings.');
+				$this->mo_oauth_show_error_message();
+				return;
+			} else{
+				$scope = sanitize_text_field( $_POST['mo_oauth_facebook_scope'] );
+				$clientid = sanitize_text_field( $_POST['mo_oauth_facebook_client_id'] );
+				$clientsecret = sanitize_text_field( $_POST['mo_oauth_facebook_client_secret'] );
+			}
+			
+			if(mo_oauth_is_customer_registered()) {
+				update_option( 'mo_oauth_facebook_enable', isset( $_POST['mo_oauth_facebook_enable']) ? $_POST['mo_oauth_facebook_enable'] : 0);
+				update_option( 'mo_oauth_facebook_scope', $scope);
+				update_option( 'mo_oauth_facebook_client_id', $clientid);
+				update_option( 'mo_oauth_facebook_client_secret', $clientsecret);
+				if(get_option('mo_oauth_facebook_client_id') && get_option('mo_oauth_facebook_client_secret')) {
+					$customer = new Customer();
+					$message = $customer->add_oauth_application( 'facebook', 'Facebook OAuth' );
+					if($message == 'Application Created') {
+						update_option( 'message', 'Your settings were saved' );
+						$this->mo_oauth_show_success_message();
+					} else {
+						update_option( 'message', $message );
+						$this->mo_oauth_show_error_message();
+					}
+				} else {
+					update_option( 'message', 'Please enter Client ID and Client Secret to save settings');
+					update_option( 'mo_oauth_google_enable', false);
+					$this->mo_oauth_show_error_message();
+				}
+			} else {
+				update_option('message', 'Please register customer before trying to save other configurations');
+				$this->mo_oauth_show_error_message();
+			}
+		} 
+		elseif( isset( $_POST['option'] ) and $_POST['option'] == "mo_oauth_contact_us_query_option" ) {
+			// Contact Us query
+			$email = $_POST['mo_oauth_contact_us_email'];
+			$phone = $_POST['mo_oauth_contact_us_phone'];
+			$query = $_POST['mo_oauth_contact_us_query'];
+			$customer = new Customer();
+			if ( $this->mo_oauth_check_empty_or_null( $email ) || $this->mo_oauth_check_empty_or_null( $query ) ) {
+				update_option('message', 'Please fill up Email and Query fields to submit your query.');
+				$this->mo_oauth_show_error_message();
+			} else {
+				$submited = $customer->submit_contact_us( $email, $phone, $query );
+				if ( $submited == false ) {
+					update_option('message', 'Your query could not be submitted. Please try again.');
+					$this->mo_oauth_show_error_message();
+				} else {
+					update_option('message', 'Thanks for getting in touch! We shall get back to you shortly.');
+					$this->mo_oauth_show_success_message();
+				}
+			}
 		}
-		
 	}
 }
 
@@ -374,22 +441,22 @@ class mo_oauth {
 		<h3>Extra profile information</h3>
 		<table class="form-table">
 			<tr>
+				<th><label for="characterName">Character Name</label></th>
+				<td>
+					<input type="text" id="characterName" disabled="true" value="<?php echo get_user_meta( $user->ID, 'user_eveonline_character_name', true ); ?>" class="regular-text" /><br />
+				</td>
+				<td rowspan="3"><?php echo mo_oauth_avatar_manager_get_custom_avatar( $user->ID, '128' ); ?></td>
+			</tr>
+			<tr>
 				<th><label for="corporation">Corporation Name</label></th>
 				<td>
 					<input type="text" id="corporation" disabled="true" value="<?php echo get_user_meta( $user->ID, 'user_eveonline_corporation_name', true ); ?>" class="regular-text" /><br />
 				</td>
-				<td rowspan="3"><img src="http://image.eveonline.com/Character/<?php echo get_user_meta($user->ID, 'user_eveonline_character_id', true);?>_256.jpg"/></td>
 			</tr>
 			<tr>
 				<th><label for="alliance">Alliance Name</label></th>
 				<td>
 					<input type="text" id="alliance" disabled="true" value="<?php echo get_user_meta( $user->ID, 'user_eveonline_alliance_name', true ); ?>" class="regular-text" /><br />
-				</td>
-			</tr>
-			<tr>
-				<th><label for="characterName">Character Name</label></th>
-				<td>
-					<input type="text" id="characterName" disabled="true" value="<?php echo get_user_meta( $user->ID, 'user_eveonline_character_name', true ); ?>" class="regular-text" /><br />
 				</td>
 			</tr>
 		</table>

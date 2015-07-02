@@ -3,7 +3,7 @@ Contributors: miniOrange
 Tags: Login with EVE Online, EVE Online Login, EVE Online SSO, EVE Online Single Sign on, EVE Online OAUTH, OAUTH, miniorange, miniorange oauth, oauth google, oauth eveonline, oauth facebook, miniorange sso, google sso, eveonline sso, facebook sso, google login, eveonline login, eve online, eve online sso, eve online login, oauth eve online, EVE Online API Authentication
 Requires at least: 3.0.1
 Tested up to: 4.2.2
-Stable tag: 4.3
+Stable tag: 4.3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -11,7 +11,7 @@ OAuth login through your favorite apps like EVE Online, Google, Facebook for use
 
 == Description ==
 
-Login with famous applications such as EVE Online and Google. If you require any other application , please free to email us at info@miniorange.com or <a href="http://miniorange.com/contact" target="_blank">Contact us</a>.
+Login with famous applications such as EVE Online and Google. If you require any other application, please free to email us at info@miniorange.com or <a href="http://miniorange.com/contact" target="_blank">Contact us</a>.
 
 = Features =
 *	Login to your Wordpress site using EVE Online and Google.
@@ -51,17 +51,17 @@ add_action( 'edit_user_profile', 'mo_oauth_my_show_extra_profile_fields' );
 </code>
 
 == Frequently Asked Questions ==
-= I need to customize the plugin or I need support and help =
-Please email us at info@miniorange.com
+= I need to customize the plugin or I need support and help? =
+Please email us at info@miniorange.com or <a href="http://miniorange.com/contact" target="_blank">Contact us</a>. You can also submit your query from plugin's configuration page.
 
-= I don't see any applications to configure. I only see Register to miniOrange. =
+= I don't see any applications to configure. I only see Register to miniOrange? =
 Our very simple and easy registration lets you register to miniOrange. OAuth login works if you are connected to miniOrange. Once you have registered with a valid email-address and phone number, you will be able to configure applications for OAuth.
 
 = How to configure the applications? =
 When you want to configure a particular application, you will see a Save Settings button, and beside that a Help button. Click on the Help button to see configuration instructions.
 
 = How do I see Corporation, Alliance and Character Name from EVE Online? =
-You can view your Corporation, Alliance and Character Name in your Edit Profile. Copy the following code in the end of your theme's `Theme Functions(functions.php)`. You can find `Theme Functions(functions.php)` in `Appearance->Editor`.
+You can view your Corporation, Alliance and Character Name in your Edit Profile. Copy the following code at the end of your theme's `Theme Functions(functions.php)` page. You can find `Theme Functions(functions.php)` in `Appearance->Editor`.
 
 <code>
 add_action( 'show_user_profile', 'mo_oauth_my_show_extra_profile_fields' );
@@ -70,8 +70,14 @@ add_action( 'edit_user_profile', 'mo_oauth_my_show_extra_profile_fields' );
 
 If you still can't see any values in the textbox. You need to login through EVE Online to Wordpress site to get those values.
 
+= I already have existing user in my wordpress site. I want this plugin to use the user's existing profile and do not create another profile? =
+We will help you in this migration process. Please email us at info@miniorange.com or <a href="http://miniorange.com/contact" target="_blank">Contact us</a>. You can also submit your query from plugin's configuration page.
+
+= I need integration of this plugin with my other installed plugins like BuddyPress, etc.? =
+We will help you in integrating this plugin with your other installed plugins. Please email us at info@miniorange.com or <a href="http://miniorange.com/contact" target="_blank">Contact us</a>. You can also submit your query from plugin's configuration page.
+
 = For any other query/problem/request =
-Please email us at info@miniorange.com or <a href="http://miniorange.com/contact" target="_blank">Contact us</a>
+Please email us at info@miniorange.com or <a href="http://miniorange.com/contact" target="_blank">Contact us</a>. You can also submit your query from plugin's configuration page.
 
 == Screenshots ==
 
@@ -80,10 +86,47 @@ Please email us at info@miniorange.com or <a href="http://miniorange.com/contact
 
 == Changelog ==
 
+= 1.0.6 =
+* Bug fix
+
+= 1.0.5 =
+* Added Login with Facebook
+
+= 1.0.4 =
+* Updates user's profile picture with his EVE Online charcater image.
+* Submit your query (Contact Us) from within the plugin.
+
+= 1.0.3 =
+* Bug fix
+
+= 1.0.2 =
+* Resolved EVE Online login flow bug in some cases
+
+= 1.0.1 =
+* Resolved some bug fixes.
+
 = 1.0 =
 * First version with supported applications as EVE Online and Google.
 
 == Upgrade Notice ==
+
+= 1.0.6 =
+* Bug fix
+
+= 1.0.5 =
+* Added Login with Facebook
+
+= 1.0.4 =
+* Updates user's profile picture with his EVE Online charcater image.
+
+= 1.0.3 =
+* Bug fix
+
+= 1.0.2 =
+* Updated version
+
+= 1.0.1 =
+* Updated version
 
 = 1.0 =
 First version of plugin.
