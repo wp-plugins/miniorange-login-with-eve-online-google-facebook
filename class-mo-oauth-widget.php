@@ -133,12 +133,7 @@ class Mo_Oauth_Widget extends WP_Widget {
 			$token_params_encode = base64_encode( $token_params_encrypt );
 			$token_params = urlencode( $token_params_encode );
 			
-			$app_return_url = get_option( 'mo_oauth_' . $_REQUEST['app_name'] . '_redirect_url' );
-			if( ! $app_return_url ) {
-				$return_url = urlencode( site_url() . '/?option=mooauth' );
-			} else {
-				$return_url = urlencode( $app_return_url . '/?option=mooauth' );
-			}
+			$return_url = urlencode( site_url() . '/?option=mooauth' );
 			$url = get_option('host_name') . '/moas/oauth/client/authorize?token=' . $token_params . '&id=' . get_option('mo_oauth_admin_customer_key') . '&encrypted=true&app=' . $_REQUEST['app_name'] . '_oauth&returnurl=' . $return_url;
 			wp_redirect( $url );
 			exit;
