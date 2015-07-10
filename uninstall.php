@@ -41,4 +41,5 @@ delete_option('mo_eve_allowed_corps');
 delete_option('mo_eve_allowed_alliances');
 delete_option('mo_eve_allowed_char_name');
 delete_option('new_registration');
+delete_option('mo_oauth_registration_status');
 ?>

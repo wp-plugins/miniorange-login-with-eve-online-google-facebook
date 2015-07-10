@@ -3,7 +3,7 @@ Contributors: miniOrange
 Tags: Login with EVE Online, EVE Online Login, EVE Online SSO, EVE Online Single Sign on, EVE Online OAUTH, OAUTH, miniorange, miniorange oauth, oauth google, oauth eveonline, oauth facebook, miniorange sso, google sso, eveonline sso, facebook sso, google login, eveonline login, eve online, eve online sso, eve online login, oauth eve online, EVE Online API Authentication
 Requires at least: 3.0.1
 Tested up to: 4.2.2
-Stable tag: 4.3.3
+Stable tag: 4.3.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -76,6 +76,9 @@ We will help you in this migration process. Please email us at info@miniorange.c
 = I need integration of this plugin with my other installed plugins like BuddyPress, etc.? =
 We will help you in integrating this plugin with your other installed plugins. Please email us at info@miniorange.com or <a href="http://miniorange.com/contact" target="_blank">Contact us</a>. You can also submit your query from plugin's configuration page.
 
+= I verified the OTP received over my email and entering the same password that I registered with, but I am still getting the error message - "Invalid password." =
+Please write to us at info@miniorange.com and we will get back to you very soon.
+
 = For any other query/problem/request =
 Please email us at info@miniorange.com or <a href="http://miniorange.com/contact" target="_blank">Contact us</a>. You can also submit your query from plugin's configuration page.
 
@@ -86,8 +89,8 @@ Please email us at info@miniorange.com or <a href="http://miniorange.com/contact
 
 == Changelog ==
 
-= 1.0.6 =
-* Bug fix
+= 1.1 =
+* Added email ID verification during registration.
 
 = 1.0.5 =
 * Added Login with Facebook
@@ -110,8 +113,8 @@ Please email us at info@miniorange.com or <a href="http://miniorange.com/contact
 
 == Upgrade Notice ==
 
-= 1.0.6 =
-* Bug fix
+= 1.1 =
+* Added email ID verification during registration.
 
 = 1.0.5 =
 * Added Login with Facebook

@@ -23,6 +23,8 @@ function mo_register() {
 		mo_oauth_show_verify_password_page();
 	} else if (trim ( get_option ( 'mo_oauth_admin_email' ) ) != '' && trim ( get_option ( 'mo_oauth_admin_api_key' ) ) == '' && get_option ( 'new_registration' ) != 'true') {
 		mo_oauth_show_verify_password_page();
+	} else if(get_option('mo_oauth_registration_status') == 'MO_OTP_DELIVERED_SUCCESS' || get_option('mo_oauth_registration_status') == 'MO_OTP_VALIDATION_FAILURE' ){
+		mo_oauth_show_otp_verification();
 	} else if (! mo_oauth_is_customer_registered()) {
 		delete_option ( 'password_mismatch' );
 		mo_oauth_show_new_registration_page();
@@ -57,7 +59,8 @@ function mo_oauth_show_new_registration_page() {
 							<td><b><font color="#FF0000">*</font>Email:</b></td>
 							<td><input class="mo_table_textbox" type="email" name="email"
 								required placeholder="person@example.com"
-								value="<?php echo get_option('mo_oauth_admin_email');?>" /></td>
+								value="<?php echo get_option('mo_oauth_admin_email');?>" />
+							</td>
 						</tr>
 
 						<tr>
@@ -66,7 +69,12 @@ function mo_oauth_show_new_registration_page() {
 								pattern="[\+]\d{11,14}|[\+]\d{1,4}[\s]\d{9,10}" name="phone" required
 								title="Phone with country code eg. +1xxxxxxxxxx"
 								placeholder="Phone with country code eg. +1xxxxxxxxxx"
-								value="<?php echo get_option('mo_oauth_admin_phone');?>" /></td>
+								value="<?php echo get_option('mo_oauth_admin_phone');?>" />
+							</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>We will call only if you need support.</td>
 						</tr>
 						<tr>
 							<td><b><font color="#FF0000">*</font>Password:</b></td>
@@ -542,6 +550,34 @@ function mo_eve_online_config() {
 					/[^a-zA-Z?,.\(\)\/@ 0-9]/, '') : null;
 		}
 	</script>
+<?php
+}
+
+function mo_oauth_show_otp_verification(){
+	?>
+		<!-- Enter otp -->
+		<form name="f" method="post" id="otp_form" action="">
+			<input type="hidden" name="option" value="mo_oauth_validate_otp" />
+				<div class="mo_table_layout">
+					<div id="panel5">
+						<table class="mo_settings_table">
+							<h3>Verify Your Email</h3>
+							<tr>
+								<td><b><font color="#FF0000">*</font>Enter OTP:</b></td>
+								<td><input class="mo_table_textbox" autofocus="true" type="text" name="mo_oauth_otp_token" required placeholder="Enter OTP" style="width:61%;" pattern="{6,8}"/>
+								 &nbsp;&nbsp;<a style="cursor:pointer;" onclick="document.getElementById('mo_oauth_resend_otp_form').submit();">Resend OTP</a></td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>
+								<td><br /><input type="submit" name="submit" value="Validate OTP" class="button button-primary button-large" /></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+		</form>
+		<form name="f" id="mo_oauth_resend_otp_form" method="post" action="">
+			<input type="hidden" name="option" value="mo_oauth_resend_otp"/>
+		</form>			
 <?php
 }
 ?>
