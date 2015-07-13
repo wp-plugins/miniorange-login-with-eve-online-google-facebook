@@ -3,7 +3,7 @@
 * Plugin Name: miniOrange OAuth Login
 * Plugin URI: http://miniorange.com
 * Description: This plugin enables login to your Wordpress site using apps like EVE Online, Google, Facebook.
-* Version: 1.1
+* Version: 1.2
 * Author: miniOrange
 * Author URI: http://miniorange.com
 * License: GPL2
@@ -186,7 +186,6 @@ class mo_oauth {
 				delete_option('verify_customer');
 				$this->mo_oauth_show_error_message();
 			}
-			update_option('password', '');
 		} if(isset($_POST['option']) and $_POST['option'] == "mo_oauth_validate_otp"){
 
 			//validation and sanitization
@@ -235,7 +234,7 @@ class mo_oauth {
 				update_option( 'mo_oauth_admin_api_key', $customerKey['apiKey'] );
 				update_option( 'customer_token', $customerKey['token'] );
 				update_option( 'mo_oauth_admin_phone', $customerKey['phone'] );
-				update_option('password', '');
+				delete_option('password');
 				update_option( 'message', 'Customer retrieved successfully');
 				delete_option('verify_customer');
 				$this->mo_oauth_show_success_message(); 
@@ -243,7 +242,6 @@ class mo_oauth {
 				update_option( 'message', 'Invalid username or password. Please try again.');
 				$this->mo_oauth_show_error_message();		
 			}
-			update_option('password', '');
 		}
 		//save API KEY for eveonline from eveonline setup
 		else if( isset( $_POST['option'] ) and $_POST['option'] == "mo_eve_save_api_key" ){
