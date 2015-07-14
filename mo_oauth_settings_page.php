@@ -1,6 +1,12 @@
 <?php
 function mo_register() {
 	?>
+	<?php
+		if(mo_oauth_is_curl_installed()==0){ ?>
+			<p style="color:red;">(Warning: <a href="http://php.net/manual/en/curl.installation.php" target="_blank">PHP CURL extension</a> is not installed or disabled. Please install/enable it before you proceed.)</p>
+		<?php
+		}
+	?>
 <div id="tab">
 	<h2 class="nav-tab-wrapper">
 		<a class="nav-tab nav-tab-active"
@@ -11,14 +17,13 @@ function mo_register() {
 </div>
 <div id="mo_oauth_settings">
 	<h2 class="mo_heading_margin">
-		miniOrange OAuth Settings
-	</h2>
+		miniOrange OAuth Settings 
+	</h2>	
 	<div class="miniorange_container">
 		<table style="width:100%;">
 			<tr>
 				<td style="vertical-align:top;width:65%;">
 		<?php
-		
 	if (get_option ( 'verify_customer' ) == 'true') {
 		mo_oauth_show_verify_password_page();
 	} else if (trim ( get_option ( 'mo_oauth_admin_email' ) ) != '' && trim ( get_option ( 'mo_oauth_admin_api_key' ) ) == '' && get_option ( 'new_registration' ) != 'true') {
@@ -53,6 +58,7 @@ function mo_oauth_show_new_registration_page() {
 				</div>
 				<div id="panel1">
 					<!--<p><b>Register with miniOrange</b></p>-->
+					<p>Please enter a valid Email ID that you have access to. You will be able to move forward after verifying an OTP that we will be sending to this email.
 					</p>
 					<table class="mo_settings_table">
 						<tr>
@@ -569,7 +575,10 @@ function mo_oauth_show_otp_verification(){
 							</tr>
 							<tr>
 								<td>&nbsp;</td>
-								<td><br /><input type="submit" name="submit" value="Validate OTP" class="button button-primary button-large" /></td>
+								<td><br /><input type="submit" name="submit" value="Validate OTP" class="button button-primary button-large" />
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="button" name="back-button" id="mo_oauth_back_button" onclick="document.getElementById('mo_oauth_change_email_form').submit();" value="Back" class="button button-primary button-large" />
+								</td>
 							</tr>
 						</table>
 					</div>
@@ -577,7 +586,10 @@ function mo_oauth_show_otp_verification(){
 		</form>
 		<form name="f" id="mo_oauth_resend_otp_form" method="post" action="">
 			<input type="hidden" name="option" value="mo_oauth_resend_otp"/>
-		</form>			
+		</form>	
+		<form id="mo_oauth_change_email_form" method="post" action="">
+			<input type="hidden" name="option" value="mo_oauth_change_email" />
+		</form>
 <?php
 }
 ?>

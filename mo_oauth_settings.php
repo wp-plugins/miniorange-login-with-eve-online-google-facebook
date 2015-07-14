@@ -3,7 +3,7 @@
 * Plugin Name: miniOrange OAuth Login
 * Plugin URI: http://miniorange.com
 * Description: This plugin enables login to your Wordpress site using apps like EVE Online, Google, Facebook.
-* Version: 1.2
+* Version: 1.3
 * Author: miniOrange
 * Author URI: http://miniorange.com
 * License: GPL2
@@ -35,7 +35,7 @@ class mo_oauth {
 	function mo_oauth_error_message() {
 		$class = "updated";
 		$message = get_option('message');
-		echo "<div class='" . $class . "'> <p>" . $message . "</p></div>"; 
+		echo "<div class='" . $class . "'><p>" . $message . "</p></div>"; 
 	}
 	
 	public function mo_oauth_deactivate() {
@@ -138,7 +138,6 @@ class mo_oauth {
 	
 	function miniorange_oauth_save_settings(){
 		if( isset( $_POST['option'] ) and $_POST['option'] == "mo_oauth_register_customer" ) {	//register the admin to miniOrange
-			
 			//validation and sanitization
 			$email = '';
 			$phone = '';
@@ -161,6 +160,11 @@ class mo_oauth {
 			
 			update_option( 'mo_oauth_admin_email', $email );
 			update_option( 'mo_oauth_admin_phone', $phone );
+			
+			if( mo_oauth_is_curl_installed() == 0 ) {
+				return $this->mo_oauth_show_curl_error();
+			}
+			
 			if( strcmp( $password, $confirmPassword) == 0 ) {
 				update_option( 'password', $password );
 				$customer = new Customer();
@@ -187,7 +191,9 @@ class mo_oauth {
 				$this->mo_oauth_show_error_message();
 			}
 		} if(isset($_POST['option']) and $_POST['option'] == "mo_oauth_validate_otp"){
-
+			if( mo_oauth_is_curl_installed() == 0 ) {
+				return $this->mo_oauth_show_curl_error();
+			}
 			//validation and sanitization
 			$otp_token = '';
 			if( $this->mo_oauth_check_empty_or_null( $_POST['mo_oauth_otp_token'] ) ) {
@@ -211,7 +217,9 @@ class mo_oauth {
 			}
 		}
 		if( isset( $_POST['option'] ) and $_POST['option'] == "mo_oauth_verify_customer" ) {	//register the admin to miniOrange
-			
+			if( mo_oauth_is_curl_installed() == 0 ) {
+				return $this->mo_oauth_show_curl_error();
+			}
 			//validation and sanitization
 			$email = '';
 			$password = '';
@@ -245,7 +253,9 @@ class mo_oauth {
 		}
 		//save API KEY for eveonline from eveonline setup
 		else if( isset( $_POST['option'] ) and $_POST['option'] == "mo_eve_save_api_key" ){
-			
+			if( mo_oauth_is_curl_installed() == 0 ) {
+				return $this->mo_oauth_show_curl_error();
+			}
 			//validation and sanitization
 			$apiKey = '';
 			$verificationCode = '';
@@ -270,7 +280,9 @@ class mo_oauth {
 		}
 		//save allowed corporations, alliances and character names
 		else if( isset( $_POST['option'] ) and $_POST['option'] == "mo_eve_save_allowed" ){
-			
+			if( mo_oauth_is_curl_installed() == 0 ) {
+				return $this->mo_oauth_show_curl_error();
+			}
 			//sanitization of corporations and alliance fields
 			$corps = sanitize_text_field( $_POST['mo_eve_allowed_corps'] );
 			$alliances = sanitize_text_field( $_POST['mo_eve_allowed_alliances'] );
@@ -299,7 +311,9 @@ class mo_oauth {
 		}
 		//submit google form
 		else if( isset( $_POST['option'] ) and $_POST['option'] == "mo_oauth_google" ) {
-			
+			if( mo_oauth_is_curl_installed() == 0 ) {
+				return $this->mo_oauth_show_curl_error();
+			}
 			//validation and sanitization
 			$scope = '';
 			$clientid = '';
@@ -341,7 +355,9 @@ class mo_oauth {
 		} 
 		//submit eveonline form
 		else if(isset($_POST['option']) and $_POST['option'] == "mo_oauth_eveonline"){
-			
+			if( mo_oauth_is_curl_installed() == 0 ) {
+				return $this->mo_oauth_show_curl_error();
+			}
 			//validation and sanitization
 			$clientid = '';
 			$clientsecret = '';
@@ -380,7 +396,9 @@ class mo_oauth {
 		} 
 		// submit facebook app
 		else if( isset( $_POST['option'] ) and $_POST['option'] == "mo_oauth_facebook" ) {
-			
+			if( mo_oauth_is_curl_installed() == 0 ) {
+				return $this->mo_oauth_show_curl_error();
+			}
 			//validation and sanitization
 			$scope = '';
 			$clientid = '';
@@ -421,6 +439,9 @@ class mo_oauth {
 			}
 		} 
 		elseif( isset( $_POST['option'] ) and $_POST['option'] == "mo_oauth_contact_us_query_option" ) {
+			if( mo_oauth_is_curl_installed() == 0 ) {
+				return $this->mo_oauth_show_curl_error();
+			}
 			// Contact Us query
 			$email = $_POST['mo_oauth_contact_us_email'];
 			$phone = $_POST['mo_oauth_contact_us_phone'];
@@ -441,7 +462,9 @@ class mo_oauth {
 			}
 		}
 		else if( isset( $_POST['option'] ) and $_POST['option'] == "mo_oauth_resend_otp" ) {
-
+			if( mo_oauth_is_curl_installed() == 0 ) {
+				return $this->mo_oauth_show_curl_error();
+			}
 			$customer = new Customer();
 			$content = json_decode($customer->send_otp_token(), true);
 			if(strcasecmp($content['status'], 'SUCCESS') == 0) {
@@ -454,6 +477,9 @@ class mo_oauth {
 					update_option('mo_oauth_registration_status','MO_OTP_DELIVERED_FAILURE');
 					$this->mo_oauth_show_error_message();
 			}
+		}
+		else if( isset( $_POST['option'] ) and $_POST['option'] == "mo_oauth_change_email" ) {
+			update_option('mo_oauth_registration_status','');
 		}
 	}
 	
@@ -498,6 +524,14 @@ class mo_oauth {
 			$this->mo_oauth_show_success_message();
 		}
 	}
+	
+	function mo_oauth_show_curl_error() {
+		if( mo_oauth_is_curl_installed() == 0 ) {
+			update_option( 'message', '<a href="http://php.net/manual/en/curl.installation.php" target="_blank">PHP CURL extension</a> is not installed or disabled. Please enable it to continue.');
+			$this->mo_oauth_show_error_message();
+			return;
+		}
+	}
 }
 
 	function mo_oauth_my_show_extra_profile_fields($user) {
@@ -537,5 +571,13 @@ class mo_oauth {
 			return 1;
 		}
 	}
-
+	
+	function mo_oauth_is_curl_installed() {
+		if  (in_array  ('curl', get_loaded_extensions())) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+	
 new mo_oauth;
