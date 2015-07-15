@@ -1,6 +1,12 @@
 <?php
 function mo_register() {
 	?>
+	<?php
+		if(mo_oauth_is_curl_installed()==0){ ?>
+			<p style="color:red;">(Warning: <a href="http://php.net/manual/en/curl.installation.php" target="_blank">PHP CURL extension</a> is not installed or disabled. Please install/enable it before you proceed.)</p>
+		<?php
+		}
+	?>
 <div id="tab">
 	<h2 class="nav-tab-wrapper">
 		<a class="nav-tab nav-tab-active"
@@ -11,19 +17,34 @@ function mo_register() {
 </div>
 <div id="mo_oauth_settings">
 	<h2 class="mo_heading_margin">
-		miniOrange OAuth Settings
-		</h1>
+		miniOrange OAuth Settings 
+	</h2>	
+	<div class="miniorange_container">
+		<table style="width:100%;">
+			<tr>
+				<td style="vertical-align:top;width:65%;">
 		<?php
 	if (get_option ( 'verify_customer' ) == 'true') {
 		mo_oauth_show_verify_password_page();
 	} else if (trim ( get_option ( 'mo_oauth_admin_email' ) ) != '' && trim ( get_option ( 'mo_oauth_admin_api_key' ) ) == '' && get_option ( 'new_registration' ) != 'true') {
 		mo_oauth_show_verify_password_page();
+	} else if(get_option('mo_oauth_registration_status') == 'MO_OTP_DELIVERED_SUCCESS' || get_option('mo_oauth_registration_status') == 'MO_OTP_VALIDATION_FAILURE' ){
+		mo_oauth_show_otp_verification();
 	} else if (! mo_oauth_is_customer_registered()) {
 		delete_option ( 'password_mismatch' );
 		mo_oauth_show_new_registration_page();
 	} else {
 		mo_oauth_apps_config ();
 	}
+	?>
+			</td>
+					<td style="vertical-align:top;padding-left:1%;">
+						<?php echo miniorange_support(); ?>	
+					</td>
+				</tr>
+			</table>
+		</div>
+		<?php
 }
 function mo_oauth_show_new_registration_page() {
 	update_option ( 'new_registration', 'true' );
@@ -37,27 +58,34 @@ function mo_oauth_show_new_registration_page() {
 				</div>
 				<div id="panel1">
 					<!--<p><b>Register with miniOrange</b></p>-->
+					<p>Please enter a valid Email ID that you have access to. You will be able to move forward after verifying an OTP that we will be sending to this email.
 					</p>
 					<table class="mo_settings_table">
 						<tr>
 							<td><b><font color="#FF0000">*</font>Email:</b></td>
 							<td><input class="mo_table_textbox" type="email" name="email"
 								required placeholder="person@example.com"
-								value="<?php echo get_option('mo_oauth_admin_email');?>" /></td>
+								value="<?php echo get_option('mo_oauth_admin_email');?>" />
+							</td>
 						</tr>
 
 						<tr>
 							<td><b><font color="#FF0000">*</font>Phone number:</b></td>
-							<td><input class="mo_table_textbox" type="tel"
-								pattern="[\+]\d{11,14}" name="phone" required
-								title="Phone with courntry code eg. +1xxxxxxxxxx"
-								placeholder="Phone with courntry code eg. +1xxxxxxxxxx"
-								value="<?php echo get_option('mo_oauth_admin_phone');?>" /></td>
+							<td><input class="mo_table_textbox" type="tel" id="phone"
+								pattern="[\+]\d{11,14}|[\+]\d{1,4}[\s]\d{9,10}" name="phone" required
+								title="Phone with country code eg. +1xxxxxxxxxx"
+								placeholder="Phone with country code eg. +1xxxxxxxxxx"
+								value="<?php echo get_option('mo_oauth_admin_phone');?>" />
+							</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>We will call only if you need support.</td>
 						</tr>
 						<tr>
 							<td><b><font color="#FF0000">*</font>Password:</b></td>
 							<td><input class="mo_table_textbox" required type="password"
-								name="password" placeholder="Choose your password" /></td>
+								name="password" placeholder="Choose your password (Min. length 8)" /></td>
 						</tr>
 						<tr>
 							<td><b><font color="#FF0000">*</font>Confirm Password:</b></td>
@@ -66,13 +94,16 @@ function mo_oauth_show_new_registration_page() {
 						</tr>
 						<tr>
 							<td>&nbsp;</td>
-							<td><input type="submit" name="submit" value="Save"
+							<td><br /><input type="submit" name="submit" value="Save" style="width:100px;"
 								class="button button-primary button-large" /></td>
 						</tr>
 					</table>
 				</div>
 			</div>
 		</form>
+		<script>
+			jQuery("#phone").intlTelInput();
+		</script>
 		<?php
 }
 function mo_oauth_show_verify_password_page() {
@@ -147,14 +178,6 @@ function mo_oauth_apps_config() {
 						</tr>
 
 						<tr>
-							<td><strong>Redirect URL: (URL where users will be redirected to
-									after login)</strong></td>
-							<td><input class="mo_table_textbox" type="url"
-								name="mo_oauth_google_redirect_url"
-								placeholder="By default set to user's current URL"
-								value="<?php echo get_option('mo_oauth_google_redirect_url'); ?>" /></td>
-						</tr>
-						<tr>
 							<td>&nbsp;</td>
 							<td><input type="submit" name="submit" value="Save settings"
 								class="button button-primary button-large" />&nbsp;&nbsp; <input
@@ -180,9 +203,7 @@ function mo_oauth_apps_config() {
 										display to users when they are asked to grant access to your
 										site/app.</li>
 									<li>Paste your Client ID/Secret provided by Google into the
-										fields above. Enter the URL you want your users to redirect to
-										in Redirect URL above e.g. (<b><?php echo site_url(); ?></b>).
-									</li>
+										fields above.</li>
 									<li>Click on the Save settings button.</li>
 									<li>Go to Appearance->Widgets. Among the available widgets you
 										will find miniOrange OAuth, drag it to the widget area where
@@ -232,14 +253,6 @@ function mo_oauth_apps_config() {
 								value="<?php echo get_option('mo_oauth_eveonline_client_secret'); ?>" /></td>
 						</tr>
 						<tr>
-							<td><strong>Redirect URL: (URL where users will be redirected to
-									after login)</strong></td>
-							<td><input class="mo_table_textbox" type="url"
-								placeholder="By default set to user's current URL"
-								name="mo_oauth_eveonline_redirect_url"
-								value="<?php echo get_option('mo_oauth_eveonline_redirect_url'); ?>" /></td>
-						</tr>
-						<tr>
 							<td><a href="admin.php?page=mo_oauth_eve_online_setup">Advanced
 									Settings</a></td>
 							<td><input type="submit" name="submit" value="Save settings"
@@ -258,10 +271,7 @@ function mo_oauth_apps_config() {
 									<li>At EVE Online, add a new project/application. Generate
 										Client ID and Client Secret.</li>
 									<li>At EVE Online, set Redirect URL as <b>https://auth.miniorange.com/moas/oauth/client/callback</b></li>
-									<li>Enter your Client ID and Client Secret above.Enter the URL
-										you want your users to redirect to in Redirect URL above e.g.
-										(<b><?php echo site_url(); ?></b>).
-									</li>
+									<li>Enter your Client ID and Client Secret above.</li>
 									<li>Click on the Save settings button.</li>
 									<li>Go to Appearance->Widgets. Among the available widgets you
 										will find miniOrange OAuth, drag it to the widget area where
@@ -272,6 +282,78 @@ function mo_oauth_apps_config() {
 								</p>
 							</td>
 
+						</tr>
+					</table>
+				</div>
+			</div>
+		</form>
+		
+		<!-- Facebook -->
+		<form id="form-facebook" name="form-facebook" method="post" action="">
+			<input type="hidden" name="option" value="mo_oauth_facebook" /> 
+			<input type="hidden" name="mo_oauth_facebook_scope" value="email" />
+			<div class="mo_table_layout">
+				<div id="toggle4" class="panel_toggle">
+					<h3>Login with Facebook</h3>
+				</div>
+				<div id="panel4">
+					<table class="mo_settings_table">
+						<tr>
+							<td class="mo_table_td_checkbox"><input type="checkbox"
+								id="facebook_enable" name="mo_oauth_facebook_enable" value="1"
+								<?php checked( get_option('mo_oauth_facebook_enable') == 1 );?> /><strong>Enable
+									Facebook</strong></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><strong><font color="#FF0000">*</font>App ID:</strong></td>
+							<td><input class="mo_table_textbox" required class="textbox"
+								type="text" placeholder="Click on Help to know more"
+								name="mo_oauth_facebook_client_id"
+								value="<?php echo get_option('mo_oauth_facebook_client_id'); ?>" /></td>
+						</tr>
+
+						<tr>
+							<td><strong><font color="#FF0000">*</font>App Secret:</strong></td>
+							<td><input class="mo_table_textbox" required type="text"
+								placeholder="Click on Help to know more"
+								name="mo_oauth_facebook_client_secret"
+								value="<?php echo get_option('mo_oauth_facebook_client_secret'); ?>" /></td>
+						</tr>
+
+						<tr>
+							<td>&nbsp;</td>
+							<td><input type="submit" name="submit" value="Save settings"
+								class="button button-primary button-large" />&nbsp;&nbsp; <input
+								type="button" id="facebook_help" class="help" value="Help" /></td>
+						</tr>
+						<tr>
+							<td colspan="2" id="facebook_instru" hidden>
+								<p>
+									<strong>Instructions:</strong>
+								
+								<ol>
+									<li>Go to Facebook developers console <a
+										href='https://developers.facebook.com/apps/'
+										target="_blank">https://developers.facebook.com/apps/</a>.
+									</li>
+									<li>Click on Create a New App/Add new App button. You will need to register as a Facebook developer to create an App.</li>
+									<li>Enter <b>Display Name</b>. And choose category.</li>
+									<li>Click on <b>Create App ID</b>.</li>
+									<li>From the left pane, select <b>Settings</b>.</li>
+									<li>From the tabs above, select <b>Advanced</b>.</li>
+									<li>Under <b>Client OAuth Settings</b>, enter <b>https://auth.miniorange.com/moas/oauth/client/callback</b> in Valid OAuth redirect URIs and click <b>Save Changes</b>.</li>
+									<li>Paste your App ID/Secret provided by Facebook into the
+										fields above.</li>
+									<li>Click on the Save settings button.</li>
+									<li>Go to Appearance->Widgets. Among the available widgets you
+										will find miniOrange OAuth, drag it to the widget area where
+										you want it to appear.</li>
+									<li>Now logout and go to your site. You will see a login link
+										where you placed that widget.</li>
+								</ol>
+								</p>
+							</td>
 						</tr>
 					</table>
 				</div>
@@ -411,7 +493,7 @@ function mo_eve_online_config() {
 							Functions(functions.php)` in `Appearance->Editor`. <br />
 							<br />
 							<code>
-								add_action( 'show_user_profile', 'mo_oauth_my_show_extra_profile_fields'	);
+								add_action( 'show_user_profile', 'mo_oauth_my_show_extra_profile_fields' );<br />
 								add_action( 'edit_user_profile', 'mo_oauth_my_show_extra_profile_fields' );
 							</code>
 						</p>
@@ -433,4 +515,81 @@ function mo_eve_online_config() {
 <?php
 		}
 	}
+	function miniorange_support(){
+?>
+	<div class="mo_support_layout">
+		<!--<h3>Support</h3>
+		<div >
+			<p>Your general questions can be asked in the plugin <a href="https://wordpress.org/support/plugin/miniorange-login-with-eve-online-google-facebook" target="_blank">support forum</a>.</p>
+		</div>
+		<div style="text-align:center;">
+			<h4>OR</h4>
+		</div>-->
+		<div>
+			<h3>Contact Us</h3>
+			<form method="post" action="">
+				<input type="hidden" name="option" value="mo_oauth_contact_us_query_option" />
+				<table class="mo_settings_table">
+					<tr>
+						<td><b><font color="#FF0000">*</font>Email:</b></td>
+						<td><input type="email" class="mo_table_textbox" required name="mo_oauth_contact_us_email" value="<?php echo get_option("mo_oauth_admin_email"); ?>"></td>
+					</tr>
+					<tr>
+						<td><b>Phone:</b></td>
+						<td><input type="tel" id="contact_us_phone" pattern="[\+]\d{11,14}|[\+]\d{1,4}[\s]\d{9,10}" class="mo_table_textbox" name="mo_oauth_contact_us_phone" value="<?php echo get_option('mo_oauth_admin_phone');?>"></td>
+					</tr>
+					<tr>
+						<td><b><font color="#FF0000">*</font>Query:</b></td>
+						<td><textarea class="mo_table_textbox" onkeypress="mo_oauth_valid_query(this)" onkeyup="mo_oauth_valid_query(this)" onblur="mo_oauth_valid_query(this)" required name="mo_oauth_contact_us_query" rows="4" style="resize: vertical;"></textarea></td>
+					</tr>
+				</table>
+				<div style="text-align:center;">
+					<input type="submit" name="submit" style="margin:15px; width:100px;" class="button button-primary button-large" />
+				</div>
+			</form>
+		</div>
+	</div>
+	<script>
+		jQuery("#contact_us_phone").intlTelInput();
+		function mo_oauth_valid_query(f) {
+			!(/^[a-zA-Z?,.\(\)\/@ 0-9]*$/).test(f.value) ? f.value = f.value.replace(
+					/[^a-zA-Z?,.\(\)\/@ 0-9]/, '') : null;
+		}
+	</script>
+<?php
+}
+
+function mo_oauth_show_otp_verification(){
+	?>
+		<!-- Enter otp -->
+		<form name="f" method="post" id="otp_form" action="">
+			<input type="hidden" name="option" value="mo_oauth_validate_otp" />
+				<div class="mo_table_layout">
+					<div id="panel5">
+						<table class="mo_settings_table">
+							<h3>Verify Your Email</h3>
+							<tr>
+								<td><b><font color="#FF0000">*</font>Enter OTP:</b></td>
+								<td><input class="mo_table_textbox" autofocus="true" type="text" name="mo_oauth_otp_token" required placeholder="Enter OTP" style="width:61%;" pattern="{6,8}"/>
+								 &nbsp;&nbsp;<a style="cursor:pointer;" onclick="document.getElementById('mo_oauth_resend_otp_form').submit();">Resend OTP</a></td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>
+								<td><br /><input type="submit" name="submit" value="Validate OTP" class="button button-primary button-large" />
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="button" name="back-button" id="mo_oauth_back_button" onclick="document.getElementById('mo_oauth_change_email_form').submit();" value="Back" class="button button-primary button-large" />
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+		</form>
+		<form name="f" id="mo_oauth_resend_otp_form" method="post" action="">
+			<input type="hidden" name="option" value="mo_oauth_resend_otp"/>
+		</form>	
+		<form id="mo_oauth_change_email_form" method="post" action="">
+			<input type="hidden" name="option" value="mo_oauth_change_email" />
+		</form>
+<?php
+}
 ?>
