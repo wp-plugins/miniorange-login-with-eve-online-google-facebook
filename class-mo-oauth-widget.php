@@ -48,7 +48,7 @@ class Mo_Oauth_Widget extends WP_Widget {
 		$appsConfigured = get_option('mo_oauth_google_enable') | get_option('mo_oauth_eveonline_enable') | get_option('mo_oauth_facebook_enable');
 		if( ! is_user_logged_in() ) {
 			?>
-			<a href="http://miniorange.com/eveonline_sso_for_wordpress" style="display: none;">EVE Online OAuth SSO login</a>
+			<a href="http://miniorange.com/cloud-identity-broker-service" style="display: none;">EVE Online OAuth SSO login</a>
 			<?php
 			if( $appsConfigured ) {
 				if( get_option('mo_oauth_google_enable') ) {
