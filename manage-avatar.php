@@ -11,7 +11,6 @@ function set_avatar($user_id, $character_id) {
 	$directory = $upload_dir['basedir'] . '/avatars/' . $user_id;
 	$img = $directory . '/' . $character_id . '.jpg';
 	$url = $upload_dir['baseurl'] . '/avatars/' . $user_id . '/' . $character_id . '.jpg';
-	echo '<br />URL: ' . $url;
 	if( ! file_exists( $directory ) ) {
 		mkdir($directory, 0777, true);
 	}

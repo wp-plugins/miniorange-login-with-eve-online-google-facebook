@@ -3,7 +3,7 @@ Contributors: miniOrange
 Tags: Login with EVE Online, EVE Online Login, EVE Online SSO, EVE Online Single Sign on, EVE Online OAUTH, OAUTH, miniorange, miniorange oauth, oauth google, oauth eveonline, oauth facebook, miniorange sso, google sso, eveonline sso, facebook sso, google login, eveonline login, eve online, eve online sso, eve online login, oauth eve online, EVE Online API Authentication
 Requires at least: 3.0.1
 Tested up to: 4.2.2
-Stable tag: 4.5
+Stable tag: 4.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -89,6 +89,9 @@ Please email us at info@miniorange.com or <a href="http://miniorange.com/contact
 
 == Changelog ==
 
+= 1.6 =
+* Bug fixes.
+
 = 1.5 =
 * Fixed bug where user was not redirecting to EVE Online in some php versions.
 
@@ -124,6 +127,9 @@ Please email us at info@miniorange.com or <a href="http://miniorange.com/contact
 * First version with supported applications as EVE Online and Google.
 
 == Upgrade Notice ==
+
+= 1.6 =
+* Bug fixes.
 
 = 1.5 =
 * Fixed bug where user was not redirecting to EVE Online in some php versions.
