@@ -89,6 +89,9 @@ Please email us at info@miniorange.com or <a href="http://miniorange.com/contact
 
 == Changelog ==
 
+= 1.5 =
+* Fixed bug where user was not redirecting to EVE Online in some php versions.
+
 = 1.4 =
 * Bug fixes
 
@@ -121,6 +124,9 @@ Please email us at info@miniorange.com or <a href="http://miniorange.com/contact
 * First version with supported applications as EVE Online and Google.
 
 == Upgrade Notice ==
+
+= 1.5 =
+* Fixed bug where user was not redirecting to EVE Online in some php versions.
 
 = 1.4 =
 * Bug fixes

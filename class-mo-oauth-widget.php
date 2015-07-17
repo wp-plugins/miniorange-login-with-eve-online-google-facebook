@@ -123,7 +123,7 @@ class Mo_Oauth_Widget extends WP_Widget {
 			$client_id = get_option('mo_oauth_' . $_REQUEST['app_name'] . '_client_id');
 			$timestamp = round( microtime(true) * 1000 );
 			$api_key = get_option('mo_oauth_admin_api_key');
-			$token = $client_id . ':' . $timestamp . ':' . $api_key;
+			$token = $client_id . ':' . number_format($timestamp, 0, '', '') . ':' . $api_key;
 			
 			$customer_token = get_option('customer_token');
 			$blocksize = 16;
