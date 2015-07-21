@@ -1,6 +1,6 @@
 <?php
 function set_avatar($user_id, $character_id) {
-	require ( ABSPATH . 'wp-admin/includes/image.php' );
+	require_once ( ABSPATH . 'wp-admin/includes/image.php' );
 	if ( ! function_exists( 'wp_handle_upload' ) ) {
         require_once( ABSPATH . 'wp-admin/includes/file.php' );
 	}
