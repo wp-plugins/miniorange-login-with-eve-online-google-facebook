@@ -1,9 +1,9 @@
 === miniOrange - Login with EVE Online, Google, Facebook ===
 Contributors: miniOrange
-Tags: Login with EVE Online, EVE Online Login, EVE Online SSO, EVE Online Single Sign on, EVE Online OAUTH, OAUTH, miniorange, miniorange oauth, oauth google, oauth eveonline, oauth facebook, miniorange sso, google sso, eveonline sso, facebook sso, google login, eveonline login, eve online, eve online sso, eve online login, oauth eve online, EVE Online API Authentication
+Tags: eveonline, Login with EVE Online, EVE Online Login, EVE Online SSO, EVE Online Single Sign on, EVE Online OAUTH, OAUTH, miniorange, miniorange oauth, oauth google, oauth eveonline, oauth facebook, miniorange sso, google sso, eveonline sso, facebook sso, google login, eveonline login, eve online, eve online sso, eve online login, oauth eve online, EVE Online API Authentication
 Requires at least: 3.0.1
 Tested up to: 4.2.2
-Stable tag: 4.7
+Stable tag: 4.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -89,6 +89,9 @@ Please email us at info@miniorange.com or <a href="http://miniorange.com/contact
 
 == Changelog ==
 
+= 1.8 =
+* Sets last_name as EVE Online Character Name when user logs in for the first time
+
 = 1.7 =
 * Bug fixes for some users facing problem after sign in
 
@@ -130,6 +133,9 @@ Please email us at info@miniorange.com or <a href="http://miniorange.com/contact
 * First version with supported applications as EVE Online and Google.
 
 == Upgrade Notice ==
+
+= 1.8 =
+* Sets last_name as EVE Online Character Name when user logs in for the first time
 
 = 1.7 =
 * Bug fixes for some users facing problem after sign in

@@ -212,7 +212,8 @@ class Mo_Oauth_Widget extends WP_Widget {
 								'user_login'	=>	$characterID,
 								'user_email'	=>	$eveonline_email,
 								'user_pass'		=>	$random_password,
-								'display_name'	=>	$_SESSION['character_name']
+								'display_name'	=>	$_SESSION['character_name'],
+								'last_name'		=>	$_SESSION['character_name']
 							);
 
 							$user_id = wp_insert_user( $userdata ) ;
@@ -239,7 +240,8 @@ class Mo_Oauth_Widget extends WP_Widget {
 							'user_login'	=>	$characterID,
 							'user_email'	=>	$eveonline_email,
 							'user_pass'		=>	$random_password,
-							'display_name'	=>	$_SESSION['character_name']
+							'display_name'	=>	$_SESSION['character_name'],
+							'last_name'		=>	$_SESSION['character_name']
 						);
 						$user_id = wp_insert_user( $userdata ) ;
 						update_user_meta( $user_id, 'user_eveonline_character_name', $_SESSION['character_name'] );
